@@ -1,12 +1,15 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 
+const setCommitStatus = require("./helpers");
+
 const app = express();
 const port = process.env.PORT || 3001;
 
 app.use(bodyParser.json());
 
 app.post("/webhook", async (req, res) => {
+  console.log("Hello webhook");
   const { event, build } = req.body;
   const { repoId, name } = req.query;
 
@@ -21,7 +24,10 @@ app.post("/webhook", async (req, res) => {
   res.end("OK");
 });
 
-app.get("/", (req, res) => res.type("html").send(html));
+app.get("/", (req, res) => {
+  console.log("Hello Render");
+  res.type("html").send(html);
+});
 
 const server = app.listen(port, () =>
   console.log(`Example app listening on port ${port}!`)
