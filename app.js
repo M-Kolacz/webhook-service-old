@@ -1,10 +1,31 @@
 const express = require("express");
+const bodyParser = require("body-parser");
+
 const app = express();
 const port = process.env.PORT || 3001;
 
-app.get("/", (req, res) => res.type('html').send(html));
+app.use(bodyParser.json());
 
-const server = app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+app.post("/webhook", async (req, res) => {
+  const { event, build } = req.body;
+  const { repoId, name } = req.query;
+
+  if (!repoId) {
+    throw new Error("Need a repoId query param on webhook URL");
+  }
+
+  if (event === "build-status-changed") {
+    await setCommitStatus(build, { repoId, name });
+  }
+
+  res.end("OK");
+});
+
+app.get("/", (req, res) => res.type("html").send(html));
+
+const server = app.listen(port, () =>
+  console.log(`Example app listening on port ${port}!`)
+);
 
 server.keepAliveTimeout = 120 * 1000;
 server.headersTimeout = 120 * 1000;
@@ -58,4 +79,4 @@ const html = `
     </section>
   </body>
 </html>
-`
+`;
