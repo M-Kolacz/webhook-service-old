@@ -43,7 +43,7 @@ function getStatus(build) {
   };
 }
 
-export async function setCommitStatus(build, { repoId, name }) {
+async function setCommitStatus(build, { repoId, name }) {
   const status = getStatus(build);
 
   const body = JSON.stringify({
@@ -68,3 +68,5 @@ export async function setCommitStatus(build, { repoId, name }) {
   console.log(result);
   console.log(await result.text());
 }
+
+module.exports = setCommitStatus;
