@@ -81,6 +81,10 @@ app.post("/webhook", async (req, res) => {
   const { event, build } = req.body;
   const { repoId, name } = req.query;
 
+  const body = req.body;
+
+  console.log({ body });
+
   if (!repoId) {
     throw new Error("Need a repoId query param on webhook URL");
   }
